@@ -6,10 +6,29 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LogicManagerStream {
-    private static Map<String, String> catMap = new HashMap<>();
-    private static ArrayList<Expenses> arrayListExpenses = new ArrayList<>();
-    private static Map<String, Integer> countMap = new HashMap<>();
+public class LogicManagerStream implements Serializable {
+    private  Map<String, String> catMap = new HashMap<>();
+    private  ArrayList<Expenses> arrayListExpenses = new ArrayList<>();
+    private  Map<String, Integer> countMap = new HashMap<>();
+
+    public LogicManagerStream loadFromBinFile(File file) {
+        try (FileInputStream fileInputStream = new FileInputStream(file);
+             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+          LogicManagerStream lms = (LogicManagerStream) objectInputStream.readObject();
+          return lms;
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+        return null ;
+    }
+    public void saveBin(File file) {
+        try (FileOutputStream fileOutStr = new FileOutputStream(file);
+             ObjectOutputStream objOutStr = new ObjectOutputStream(fileOutStr)) {
+            objOutStr.writeObject(this);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
 
     public void readTsv() throws IOException {
         TsvParserSettings settings = new TsvParserSettings();
@@ -50,6 +69,7 @@ public class LogicManagerStream {
         SendingItem sendingItem = new SendingItem(mapMax.get().getKey(), mapMax.get().getValue());
         return sendingItem;
     }
+
 
     public Map<String, Integer> getCountMap() {
         return countMap;

@@ -26,7 +26,7 @@ public class Client {
                         printWriter.println(gsn.toJson(item));
                     }
                 } else {
-                    // printWriter.println("Q");
+                    printWriter.println("Q");
                     break;
                 }
                 String strIn = bufferedReader.readLine();
