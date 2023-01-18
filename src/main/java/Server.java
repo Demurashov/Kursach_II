@@ -10,14 +10,18 @@ import java.util.List;
 
 public class Server {
     public static final int PORT = 8888;
-
+    private static File file = new File("data.bin");
 
     public static void main(String[] args) throws IOException {
         //char[]ch=HOST.toCharArray();
         //System.out.println(ch[ch.length-1]);
         //LogicManager logicManager=new LogicManager();
         Gson gsn = new Gson();
-        LogicManagerStream logicManagerStream = new LogicManagerStream();
+        LogicManagerStream logicManagerStream=new LogicManagerStream();
+        if (file.exists()) {
+            logicManagerStream=logicManagerStream.loadFromBinFile(file);
+        }
+
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
@@ -37,6 +41,7 @@ public class Server {
                     SendingItem sendingItem = logicManagerStream.maxCategoryFinder(in);
                     System.out.println("Отправлено:" + sendingItem.toString());
                     printWriter.println(gsn.toJson(sendingItem));
+                    logicManagerStream.saveBin(file);
                 }
             }
             logicManagerStream.getCountMap().forEach((a, b) -> System.out.println(a + " " + b));

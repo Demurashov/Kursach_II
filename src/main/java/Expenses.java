@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Date;
 
-public class Expenses {
+public class Expenses implements Serializable {
     private String title;
     private String date;
     private int sum;
