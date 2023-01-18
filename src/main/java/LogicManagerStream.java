@@ -27,7 +27,7 @@ public class LogicManagerStream {
         return expenses;
     }
 
-    public SendingItem toCatCounter(String jsonStrIn) throws IOException {
+    public SendingItem maxCategoryFinder(String jsonStrIn) throws IOException {
         String valueCat;
         Expenses expenses = jsonToObj(jsonStrIn);//получение obj из строки json, и наименования покупки из obj
         String titleKey = expenses.getTitle();
