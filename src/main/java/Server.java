@@ -34,7 +34,7 @@ public class Server {
                         continue;
                     }
                     System.out.println("Получено сообщение от клиента: " + in);
-                    SendingItem sendingItem = logicManagerStream.toCatCounter(in);
+                    SendingItem sendingItem = logicManagerStream.maxCategoryFinder(in);
                     System.out.println("Отправлено:" + sendingItem.toString());
                     printWriter.println(gsn.toJson(sendingItem));
                 }
