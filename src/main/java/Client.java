@@ -30,9 +30,9 @@ public class Client {
                     break;
                 }
                 String strIn = bufferedReader.readLine();
-                SendingItem sendingItem = gsn.fromJson(strIn, SendingItem.class);
+                SendingStatistics sendingStatistics = gsn.fromJson(strIn, SendingStatistics.class);
                 System.out.println("Получено сообщение от сервера: " + i + " " + strIn);
-                System.out.println("Дешифровка:" + sendingItem.toString());
+                //System.out.println("Дешифровка:" + sendingItem.toString());
 
 
             } catch (Exception exception) {
@@ -45,7 +45,7 @@ public class Client {
     }
 
     public static void expensesGena() {
-        String[] titles = {"булка", "колбаса", "сухарики", "курица", "тапки", "шапка", "мыло", "акции", "кирпич"};
+        String[] titles = {"булка", "курица", "тапки", "шапка", "мыло", "акции", "кирпич"};
         String[] dates = {"2022.02.08", "2022.01.01", "2022.01.02", "2022.01.03", "2022.01.04",
                 "2022.01.05", "2022.02.06", "2022.02.07", "2022.01.08"};
         Random random = new Random();
@@ -59,6 +59,7 @@ public class Client {
 
 
     }
+    //String[] titles = {"булка", "колбаса", "сухарики", "курица", "тапки", "шапка", "мыло", "акции", "кирпич"};
 }
 
 

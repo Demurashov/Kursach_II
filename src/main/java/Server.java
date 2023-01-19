@@ -38,9 +38,9 @@ public class Server {
                         continue;
                     }
                     System.out.println("Получено сообщение от клиента: " + in);
-                    SendingItem sendingItem = logicManagerStream.maxCategoryFinder(in);
-                    System.out.println("Отправлено:" + sendingItem.toString());
-                    printWriter.println(gsn.toJson(sendingItem));
+                    SendingStatistics sendingStatistics= logicManagerStream.maxCategoryStatFinder(in);
+                    System.out.println("Отправлено:" + sendingStatistics.toString());
+                    printWriter.println(gsn.toJson(sendingStatistics));
                     logicManagerStream.saveBin(file);
                 }
             }
