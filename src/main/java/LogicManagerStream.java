@@ -47,30 +47,7 @@ public class LogicManagerStream implements Serializable {
         return expenses;
     }
 
-    public SendingItem maxCategoryFinder(String jsonStrIn) throws IOException {
-        String valueCat;
-        Expenses expenses = jsonToObj(jsonStrIn);//получение obj из строки json, и наименования покупки из obj
-        String titleKey = expenses.getTitle();
-        if (catMap == null || catMap.isEmpty()) {
-            readTsv();
-        }
-        if (catMap.containsKey(titleKey)) {
-            valueCat = catMap.get(titleKey); //получение наименования категории по ее ключу из словаря категорий
-        } else {
-            valueCat = "другое";
-        }
-        expenses.setCategory(valueCat);
-        arrayListExpenses.add(expenses);
-        countMap = arrayListExpenses.stream()
-                .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
-        Optional<Map.Entry<String, Integer>> mapMax = countMap.entrySet().stream()
-                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
-//        System.out.println(mapMax.toString());
-//        System.out.println();
-//        System.out.println("Ключ: " + mapMax.get().getKey() + "Знач: " + mapMax.get().getValue());
-        SendingItem sendingItem = new SendingItem(mapMax.get().getKey(), mapMax.get().getValue());
-        return sendingItem;
-    }
+
 
 
     public Map<String, Integer> getCountMap() {

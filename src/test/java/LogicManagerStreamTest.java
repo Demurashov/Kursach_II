@@ -26,18 +26,6 @@ public class LogicManagerStreamTest {
     Gson gsn = new Gson();
 
     @Test
-    public void maxCategoryFinderTest() throws IOException {
-        SendingItem result = null;
-
-        for (Expenses expens : arrayIn) {
-            String strjsonIn = gsn.toJson(expens);
-            result = lms.maxCategoryFinder(strjsonIn);
-        }
-        Assertions.assertEquals("еда", result.getMaxCategory().getCategory());
-        Assertions.assertEquals(5, result.getMaxCategory().getSum());
-    }
-
-    @Test
     public void maxCategoryStatFinderTest() throws IOException {
         SendingStatistics result = null;
 
