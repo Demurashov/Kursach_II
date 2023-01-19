@@ -1,4 +1,6 @@
-public class SendingItem {
+import java.io.Serializable;
+
+public class SendingItem implements Serializable {
     private MaxCategory maxCategory;
     public SendingItem(String category,int sum){
         MaxCategory maxCategory=new MaxCategory(category,sum);
