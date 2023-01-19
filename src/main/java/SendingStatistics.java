@@ -29,6 +29,16 @@ public class SendingStatistics implements Serializable {
         return maxCategoryStat;
     }
 
+    public MaxYearCategory getMaxYearCategory() {
+        return maxYearCategory;
+    }
+    public MaxMonthCategory getMaxMonthCategory(){
+        return maxMonthCategory;
+    }
+    public MaxDayCategory getMaxDayCategory(){
+        return maxDayCategory;
+    }
+
     @Override
     public String toString() {
         return "Max category: " + maxCategoryStat.getCategory() + " Summ: " + maxCategoryStat.getSum();
