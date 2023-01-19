@@ -7,20 +7,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class LogicManagerStream implements Serializable {
-    private  Map<String, String> catMap = new HashMap<>();
-    private  ArrayList<Expenses> arrayListExpenses = new ArrayList<>();
-    private  Map<String, Integer> countMap = new HashMap<>();
+    private Map<String, String> catMap = new HashMap<>();
+    private ArrayList<Expenses> arrayListExpenses = new ArrayList<>();
+    private Map<String, Integer> countMap = new HashMap<>();
 
     public LogicManagerStream loadFromBinFile(File file) {
         try (FileInputStream fileInputStream = new FileInputStream(file);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-          LogicManagerStream lms = (LogicManagerStream) objectInputStream.readObject();
-          return lms;
+            LogicManagerStream lms = (LogicManagerStream) objectInputStream.readObject();
+            return lms;
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
-        return null ;
+        return null;
     }
+
     public void saveBin(File file) {
         try (FileOutputStream fileOutStr = new FileOutputStream(file);
              ObjectOutputStream objOutStr = new ObjectOutputStream(fileOutStr)) {
@@ -46,7 +47,14 @@ public class LogicManagerStream implements Serializable {
         return expenses;
     }
 
-    public SendingItem maxCategoryFinder(String jsonStrIn) throws IOException {
+
+
+
+    public Map<String, Integer> getCountMap() {
+        return countMap;
+    }
+
+    public SendingStatistics maxCategoryStatFinder(String jsonStrIn) throws IOException {
         String valueCat;
         Expenses expenses = jsonToObj(jsonStrIn);//получение obj из строки json, и наименования покупки из obj
         String titleKey = expenses.getTitle();
@@ -59,20 +67,41 @@ public class LogicManagerStream implements Serializable {
             valueCat = "другое";
         }
         expenses.setCategory(valueCat);
-        arrayListExpenses.add(expenses);
+        arrayListExpenses.add(expenses);//создаем список расходов
+        //считаем max расходов за весь период
         countMap = arrayListExpenses.stream()
                 .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
-        Optional<Map.Entry<String, Integer>> mapMax = countMap.entrySet().stream().collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
-//        System.out.println(mapMax.toString());
-//        System.out.println();
-//        System.out.println("Ключ: " + mapMax.get().getKey() + "Знач: " + mapMax.get().getValue());
-        SendingItem sendingItem = new SendingItem(mapMax.get().getKey(), mapMax.get().getValue());
-        return sendingItem;
-    }
-
-
-    public Map<String, Integer> getCountMap() {
-        return countMap;
+        Optional<Map.Entry<String, Integer>> mapMax = countMap.entrySet().stream()
+                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
+        SendingStatistics sendingStatistics = new SendingStatistics();
+        sendingStatistics.setMaxCategoryStat(mapMax.get().getKey(), mapMax.get().getValue());
+        //считаем max расходов за год
+        // if (arrayListExpenses.size() > 0) {
+        countMap = arrayListExpenses.stream()
+                .filter((a) -> a.getYear().equals(expenses.getYear()))
+                .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
+        Optional<Map.Entry<String, Integer>> mapMaxYear = countMap.entrySet().stream()
+                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
+        sendingStatistics.setMaxYearCategory(mapMaxYear.get().getKey(), mapMaxYear.get().getValue());
+        //}
+//        //считаем max расходов за месяц
+        countMap = arrayListExpenses.stream()
+                .filter((a) -> a.getYear().equals(expenses.getYear()))
+                .filter((a) -> a.getMonth().equals(expenses.getMonth()))
+                .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
+        Optional<Map.Entry<String, Integer>> mapMaxMonth = countMap.entrySet().stream()
+                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
+        sendingStatistics.setMaxMonthCategory(mapMaxMonth.get().getKey(), mapMaxMonth.get().getValue());
+        //считаем max расходов за день
+        countMap = arrayListExpenses.stream()
+                .filter((a) -> a.getYear().equals(expenses.getYear()))
+                .filter((a) -> a.getMonth().equals(expenses.getMonth()))
+                .filter((a) -> a.getDay().equals(expenses.getDay()))
+                .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
+        Optional<Map.Entry<String, Integer>> mapMaxDay = countMap.entrySet().stream()
+                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
+        sendingStatistics.setMaxDayCategory(mapMaxDay.get().getKey(), mapMaxDay.get().getValue());
+        return sendingStatistics;
     }
 
 }
