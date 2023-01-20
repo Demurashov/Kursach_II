@@ -76,14 +76,14 @@ public class LogicManagerStream implements Serializable {
         SendingStatistics sendingStatistics = new SendingStatistics();
         sendingStatistics.setMaxCategoryStat(mapMax.get().getKey(), mapMax.get().getValue());
         //считаем max расходов за год
-        // if (arrayListExpenses.size() > 0) {
+
         countMap = arrayListExpenses.stream()
                 .filter((a) -> a.getYear().equals(expenses.getYear()))
                 .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
         Optional<Map.Entry<String, Integer>> mapMaxYear = countMap.entrySet().stream()
                 .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
         sendingStatistics.setMaxYearCategory(mapMaxYear.get().getKey(), mapMaxYear.get().getValue());
-        //}
+
 //        //считаем max расходов за месяц
         countMap = arrayListExpenses.stream()
                 .filter((a) -> a.getYear().equals(expenses.getYear()))
