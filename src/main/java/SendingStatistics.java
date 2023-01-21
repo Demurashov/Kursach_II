@@ -3,13 +3,13 @@ import java.io.Serializable;
 
 public class SendingStatistics implements Serializable {
 
-    private MaxCategoryStat maxCategoryStat;
+    private MaxCategory maxCategory;
     private MaxYearCategory maxYearCategory;
     private MaxMonthCategory maxMonthCategory;
     private MaxDayCategory maxDayCategory;
 
     public void setMaxCategoryStat(String category, int sum) {
-        this.maxCategoryStat = new MaxCategoryStat(category, sum);
+        this.maxCategory = new MaxCategory(category, sum);
     }
 
     public void setMaxYearCategory(String category, int sum) {
@@ -24,8 +24,8 @@ public class SendingStatistics implements Serializable {
         this.maxDayCategory = new MaxDayCategory(category, sum);
     }
 
-    public MaxCategoryStat getMaxCategoryStat() {
-        return maxCategoryStat;
+    public MaxCategory getMaxCategoryStat() {
+        return maxCategory;
     }
 
     public MaxYearCategory getMaxYearCategory() {
@@ -42,15 +42,15 @@ public class SendingStatistics implements Serializable {
 
     @Override
     public String toString() {
-        return "Max category: " + maxCategoryStat.getCategory() + " Summ: " + maxCategoryStat.getSum();
+        return "Max category: " + maxCategory.getCategory() + " Summ: " + maxCategory.getSum();
     }
 }
 
-class MaxCategoryStat {
+class MaxCategory {
     private String category;
     private int sum;
 
-    public MaxCategoryStat(String category, int sum) {
+    public MaxCategory(String category, int sum) {
         this.category = category;
         this.sum = sum;
     }

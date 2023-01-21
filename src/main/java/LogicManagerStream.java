@@ -37,18 +37,13 @@ public class LogicManagerStream implements Serializable {
         List<String[]> allRows = parser.parseAll(new FileReader("categories.tsv"));
         catMap = allRows.stream()
                 .collect(Collectors.toMap(e -> e[0], e -> e[1]));
-
     }
 
     public Expenses jsonToObj(String jsonStrIn) {
-        //String strIn="{"title": "булка", "date": "2022.02.08", "sum": 200}";
         Gson gson = new Gson();
         Expenses expenses = gson.fromJson(jsonStrIn, Expenses.class);
         return expenses;
     }
-
-
-
 
     public Map<String, Integer> getCountMap() {
         return countMap;
@@ -68,11 +63,11 @@ public class LogicManagerStream implements Serializable {
         }
         expenses.setCategory(valueCat);
         arrayListExpenses.add(expenses);//создаем список расходов
+
         //считаем max расходов за весь период
         countMap = arrayListExpenses.stream()
                 .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
-        Optional<Map.Entry<String, Integer>> mapMax = countMap.entrySet().stream()
-                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
+        Optional<Map.Entry<String, Integer>> mapMax = countMap.entrySet().stream().max(Map.Entry.comparingByValue());
         SendingStatistics sendingStatistics = new SendingStatistics();
         sendingStatistics.setMaxCategoryStat(mapMax.get().getKey(), mapMax.get().getValue());
         //считаем max расходов за год
@@ -80,26 +75,24 @@ public class LogicManagerStream implements Serializable {
         countMap = arrayListExpenses.stream()
                 .filter((a) -> a.getYear().equals(expenses.getYear()))
                 .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
-        Optional<Map.Entry<String, Integer>> mapMaxYear = countMap.entrySet().stream()
-                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
+        Optional<Map.Entry<String, Integer>> mapMaxYear = countMap.entrySet().stream().max(Map.Entry.comparingByValue());
         sendingStatistics.setMaxYearCategory(mapMaxYear.get().getKey(), mapMaxYear.get().getValue());
 
-//        //считаем max расходов за месяц
+        //считаем max расходов за месяц
         countMap = arrayListExpenses.stream()
                 .filter((a) -> a.getYear().equals(expenses.getYear()))
                 .filter((a) -> a.getMonth().equals(expenses.getMonth()))
                 .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
-        Optional<Map.Entry<String, Integer>> mapMaxMonth = countMap.entrySet().stream()
-                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
+        Optional<Map.Entry<String, Integer>> mapMaxMonth = countMap.entrySet().stream().max(Map.Entry.comparingByValue());
         sendingStatistics.setMaxMonthCategory(mapMaxMonth.get().getKey(), mapMaxMonth.get().getValue());
+
         //считаем max расходов за день
         countMap = arrayListExpenses.stream()
                 .filter((a) -> a.getYear().equals(expenses.getYear()))
                 .filter((a) -> a.getMonth().equals(expenses.getMonth()))
                 .filter((a) -> a.getDay().equals(expenses.getDay()))
                 .collect(Collectors.groupingBy(Expenses::getCategory, Collectors.summingInt(Expenses::getSum)));
-        Optional<Map.Entry<String, Integer>> mapMaxDay = countMap.entrySet().stream()
-                .collect(Collectors.maxBy(Comparator.comparing((a) -> a.getValue())));
+        Optional<Map.Entry<String, Integer>> mapMaxDay = countMap.entrySet().stream().max(Map.Entry.comparingByValue());
         sendingStatistics.setMaxDayCategory(mapMaxDay.get().getKey(), mapMaxDay.get().getValue());
         return sendingStatistics;
     }

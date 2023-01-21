@@ -9,23 +9,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Server {
-    public static final int PORT = 8888;
+    public static final int PORT = 8989;
     private static File file = new File("data.bin");
 
-    public void executSrv(){
+    public void executSrv() {
         Gson gsn = new Gson();
-        LogicManagerStream logicManagerStream=new LogicManagerStream();
+        LogicManagerStream logicManagerStream = new LogicManagerStream();
         if (file.exists()) {
-            logicManagerStream=logicManagerStream.loadFromBinFile(file);
+            logicManagerStream = logicManagerStream.loadFromBinFile(file);
         }
-
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
                      PrintWriter printWriter = new PrintWriter(clientSocket.getOutputStream(), true);
-                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                ) {
-
+                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket
+                             .getInputStream()))) {
                     System.out.println("Подключен клиент:" + clientSocket.getPort());
                     String in = bufferedReader.readLine();
                     if (in != null && in.equals("Q")) {
@@ -35,15 +33,15 @@ public class Server {
                         continue;
                     }
                     System.out.println("Получено сообщение от клиента: " + in);
-                    SendingStatistics sendingStatistics= logicManagerStream.maxCategoryStatFinder(in);
+                    SendingStatistics sendingStatistics = logicManagerStream.maxCategoryStatFinder(in);
                     System.out.println("Отправлено:" + sendingStatistics.toString());
                     printWriter.println(gsn.toJson(sendingStatistics));
                     logicManagerStream.saveBin(file);
                 }
             }
-            //logicManagerStream.getCountMap().forEach((a, b) -> System.out.println(a + " " + b));
-        } catch (Exception exception) {
-            exception.getStackTrace();
+        } catch (IOException exception) {
+            System.out.println("Не могу стартовать сервер");
+            exception.printStackTrace();
         }
     }
 

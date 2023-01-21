@@ -36,13 +36,13 @@ public class LogicManagerStreamTest {
         Assertions.assertEquals("еда", result.getMaxCategoryStat().getCategory());
         Assertions.assertEquals(5, result.getMaxCategoryStat().getSum());
         //год
-        Assertions.assertEquals("одежда",result.getMaxYearCategory().getCategory());
-        Assertions.assertEquals(4,result.getMaxYearCategory().getSum());
+        Assertions.assertEquals("одежда", result.getMaxYearCategory().getCategory());
+        Assertions.assertEquals(4, result.getMaxYearCategory().getSum());
         //месяц
-        Assertions.assertEquals("одежда",result.getMaxMonthCategory().getCategory());
-        Assertions.assertEquals(2,result.getMaxMonthCategory().getSum());
+        Assertions.assertEquals("одежда", result.getMaxMonthCategory().getCategory());
+        Assertions.assertEquals(2, result.getMaxMonthCategory().getSum());
         //день
-        Assertions.assertEquals("одежда",result.getMaxDayCategory().getCategory());
-        Assertions.assertEquals(1,result.getMaxDayCategory().getSum());
+        Assertions.assertEquals("одежда", result.getMaxDayCategory().getCategory());
+        Assertions.assertEquals(1, result.getMaxDayCategory().getSum());
     }
 }
